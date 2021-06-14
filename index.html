@@ -1,0 +1,245 @@
+<html>
+<head>
+<title>Homepage</title>
+<style>
+.bars{
+  background-size: 5px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding : 5px;
+  float:left;
+  }
+
+.containerDiv{
+	border:2px solid red;
+	height : 510px;
+	width : 757px;
+}
+</style>
+
+<script>
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+var bar_counter = 0;
+bar_lengths = new Array();
+async function createBar(btnObj)
+{
+	while(bar_lengths.length < 30){
+		var size =  Math.floor(Math.random() * (50 - 1) ) + 1;
+		
+		if(size>50)
+		{
+			alert("Please enter a value between 1 and 50 only!");
+		}
+		else{
+			if(bar_lengths.indexOf(size) === -1){
+				bar = document.createElement("div");
+				bar_counter = parseInt(bar_counter) + parseInt(1);
+				bar.setAttribute("class","bars");
+				bar.setAttribute("name","bar"+bar_counter);
+				bar.setAttribute("id",size);
+				bar.style.height=10*size+"px";
+				var color1 = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+				var color2 = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+				
+				bar.style.backgroundImage="linear-gradient(359deg,"+color1+","+color2+")";
+				bar.insertAdjacentHTML("beforeend","<font color='red' style='vertical-align: text-bottom; background-color:white'>"+size+"</font>");
+				var place_to_insert = document.getElementById("placeBars");
+				place_to_insert.appendChild(bar);
+				bar_lengths.push(size);
+				temp="";
+				for(var i= 0; i < bar_lengths.length; i++) {
+					temp = temp+bar_lengths[i]+" , ";
+				}
+				document.getElementById("YourArray").innerHTML = "Created Array : "+temp;
+				await timeout(100);
+			}
+		}
+	}
+	btnObj.disabled=true;
+	
+}
+
+//Bubble Sort Algo
+function swap(arr, first_Index, second_Index){
+    var temp = arr[first_Index];
+    arr[first_Index] = arr[second_Index];
+    arr[second_Index] = temp;
+}
+
+async function bubble_Sort(arr){
+
+    var len = arr.length;
+	var i, j, stop;
+
+    for (i=0; i < len; i++){
+        for (j=0, stop=len-i; j < stop; j++){
+		
+            if (arr[j] > arr[j+1]){
+				//Getting bar DOM elements and storing different attributes for later use
+				element1 = document.getElementById(arr[j]);
+				element1_height = element1.style.height;
+				element1_gradient = element1.style.backgroundImage;
+				console.log("Element 1 is : "+element1_height);
+				
+				element2 = document.getElementById(arr[j+1]);
+				element2_height = element2.style.height;
+				console.log("Element 2 is : "+element2_height);
+				element2_gradient = element2.style.backgroundImage;
+				
+				//Swapping Elements of array
+                swap(arr, j, j+1);
+				console.log("swapped: "+arr[j]+" and "+arr[j+1]);
+				
+				//Swapping styles and elements of both swapped bars
+				element1.style.height=parseInt(element2_height)+"px";
+			    element1.innerHTML = "<font color='red' style='vertical-align: text-bottom; background-color:white'>"+parseInt(element2_height)/10+"</font>";
+				element1.setAttribute("id",parseInt(element2_height)/10);
+				element1.style.backgroundImage = element2_gradient;
+				console.log("Changed Element 1's height to : "+parseInt(element2_height));
+				
+				element2.style.height=parseInt(element1_height)+"px";
+			    element2.innerHTML = "<font color='red' style='vertical-align: text-bottom; background-color:white'>"+parseInt(element1_height)/10+"</font>";
+				element2.setAttribute("id",parseInt(element1_height)/10);
+				element2.style.backgroundImage = element1_gradient;
+				console.log("Changed Element 2's height to : "+parseInt(element1_height));
+				
+				temp="";
+				for(var p= 0; p < arr.length; p++) {
+					temp = temp+arr[p]+" , "
+				}
+				var color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+				document.getElementById("SortedArray").innerHTML = "<font color="+color+">"+"Sorted Array : "+temp+"</font>";
+				await timeout(70);
+            }
+		
+        }
+    }
+	document.getElementById("SortedArray").innerHTML = "Sorted Array : "+temp;
+    return arr;
+}
+
+//Selection Sort
+async function selectionSort(inputArr) { 
+    let n = inputArr.length;
+        
+    for(let i = 0; i < n; i++) {
+        // Finding the smallest number in the subarray
+        let min = i;
+        for(let j = i+1; j < n; j++){
+            if(inputArr[j] < inputArr[min]) {
+                min=j; 
+            }
+         }
+         if (min != i) {
+             // Swapping the elements
+             let tmp = inputArr[i];
+			 element1 = document.getElementById(inputArr[i]);
+			 element2 = document.getElementById(inputArr[min]);
+			 
+			 element1_height = element1.style.height;
+			 console.log("Element 1 is : "+element1_height);
+			 element1_gradient = element1.style.backgroundImage;
+			 
+			 element2_height = element2.style.height;
+			 console.log("Element 2 is : "+element2_height);
+			 element2_gradient = element2.style.backgroundImage;
+			 
+             inputArr[i] = inputArr[min];
+             inputArr[min] = tmp;
+
+			 element1.style.height=parseInt(element2_height)+"px";
+			 element1.innerHTML = "<font color='red' style='vertical-align: text-bottom; background-color:white'>"+parseInt(element2_height)/10+"</font>";
+			 element1.setAttribute("id",parseInt(element2_height)/10);
+			 element1.style.backgroundImage = element2_gradient;
+			 console.log("Changed Element 1's height to : "+element2_height);
+			 element2.style.height=parseInt(element1_height)+"px";
+			 element2.innerHTML = "<font color='red' style='vertical-align: text-bottom; background-color:white'>"+parseInt(element1_height)/10+"</font>";
+			 element2.setAttribute("id",parseInt(element1_height)/10);
+			 element2.style.backgroundImage = element1_gradient;
+			 console.log("Changed Element 2's height to : "+element1_height);
+			 
+			 temp="";
+			 for(var p= 0; p < inputArr.length; p++) {
+				temp = temp+inputArr[p]+" , "
+			 }
+			 var color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+			 document.getElementById("SortedArray").innerHTML = "<font color="+color+">"+"Sorted Array : "+temp+"</font>";
+			 
+			 await timeout(70);
+        }
+    }
+	document.getElementById("SortedArray").innerHTML = "Sorted Array : "+temp;
+    return inputArr;
+}
+
+//Insertion Sort
+async function insertionSort(array) {
+    const arr = array.slice();
+	for(let i=0;i<arr.length;i++){
+		for(let j=i;j>0;j--)
+		{
+			if(arr[j]<arr[j-1])
+			{
+				arr_j = document.getElementById(arr[j]);
+				arr_j_height = arr_j.style.height;
+				arr_j_gradient = arr_j.style.backgroundImage;
+				
+				arr_j_plus_one = document.getElementById(arr[j-1]);
+				arr_j_plus_one_height = arr_j_plus_one.style.height;
+				arr_j_plus_one_gradient = arr_j_plus_one.style.backgroundImage;
+				
+				[arr[j],arr[j-1]] = [arr[j-1],arr[j]];
+				
+				arr_j.style.height = arr_j_plus_one_height;
+				arr_j.style.backgroundImage = arr_j_plus_one_gradient;
+				arr_j.setAttribute("id",parseInt(arr_j_plus_one_height)/10);
+				arr_j.innerHTML = "<font color='red' style='vertical-align: text-bottom; background-color:white'>"+parseInt(arr_j_plus_one_height)/10+"</font>";
+				
+				arr_j_plus_one.style.height = arr_j_height;
+				arr_j_plus_one.style.backgroundImage = arr_j_gradient;
+				arr_j_plus_one.setAttribute("id",parseInt(arr_j_height)/10);
+				arr_j_plus_one.innerHTML = "<font color='red' style='vertical-align: text-bottom; background-color:white'>"+parseInt(arr_j_height)/10+"</font>";
+				
+				temp="";
+				for(var p= 0; p < arr.length; p++) {
+				temp = temp+arr[p]+" , "
+				}
+				var color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+				document.getElementById("SortedArray").innerHTML = "<font color="+color+">"+"Sorted Array : "+temp+"</font>";
+				
+				await timeout(70);
+			}
+			else{
+				break;
+			}
+		}
+	}
+	document.getElementById("SortedArray").innerHTML = "Sorted Array : "+temp;
+	return arr;
+}
+
+//Quick Sort
+
+
+</script>
+</head>
+<body style="background-color:black">
+<center>
+<button type="button" name="create_button" onclick="createBar(this)">Randomize Data Set</button> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+<button type="button" name="BubbleSortbtn" onclick="bubble_Sort(bar_lengths)">Bubble Sort</button> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+<button type="button" name="InsertionSortbtn" onclick="selectionSort(bar_lengths)">Selection Sort</button>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+<button type="button" name="InsertionSortbtn" onclick="insertionSort(bar_lengths)">Insertion Sort</button><br><br><br>
+<div name="barsHere" id="placeBars" class="containerDiv">
+</div>
+<br><br>
+<font color="white">
+<pre id="YourArray">Created Array :  </pre><br>
+<pre id="SortedArray">Sorted Array :  </pre>
+</font>
+</center>
+
+</body>
+</html>
